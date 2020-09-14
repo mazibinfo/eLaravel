@@ -1,0 +1,41 @@
+<section id="slider"><!--slider-->
+    <div class="container">
+      <div class="row"> 
+
+         <div id="carousel-example-generic" class="carousel slide " data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <?php
+                        $slider=DB::table('tbl_slider')->where('status','1')->get();
+                    ?>
+                    @foreach( $slider as $v_slider )
+                        <li data-target="#carousel-example-generic" data-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}"></li>
+                    @endforeach
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    <?php
+                        $slider=DB::table('tbl_slider')->where('status','1')->get();
+                    ?>
+                    @foreach( $slider as $v_slider )
+                        <div class="item {{ $loop->first ? ' active' : '' }}" >
+                            <img src="{{ $v_slider->slider_image }}"  style="width: 100%; height: 400px;" ">
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section><!--/slider-->
