@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use Redirect;
 use Session;
+use Cart;
 Session_Start();
 
 class CheckoutController extends Controller
@@ -63,7 +64,47 @@ class CheckoutController extends Controller
         $payment_getway=$request->payment_getway;
         $shipping_id=Session::get('shipping_id');
         $customer_id=Session::get('customer_id');
-        dd($payment_getway,$shipping_id,$customer_id);
+        $order_total = Cart::getTotal();
+
+        $payment_data=[
+            'payment_method' => $payment_getway,
+            'payment_status' => 'Pending...'
+        ];
+
+        $payment_id=DB::table('tbl_payment')->InsertGetId($payment_data);
+
+        $order_data=[
+            'payment_id' => $payment_id,
+            'customer_id' => $customer_id,
+            'shipping_id' => $shipping_id,
+            'order_total' => $order_total,
+            'order_status' => 'Pending...'
+        ];
+
+        $order_id=DB::table('tbl_order')->InsertgetId($order_data);
+
+        $cartCollection = Cart::getContent();
+
+        foreach ($cartCollection as $v_cartCollection) {
+            $order_details_data=[
+                'order_id' => $order_id,
+                'product_id' => $v_cartCollection->id,
+                'product_name' => $v_cartCollection->name,
+                'product_price' => $v_cartCollection->price,
+                'product_sales_quantity' => $v_cartCollection->quantity
+             ];
+
+             DB::table('tbl_order_details')->insert($order_details_data);
+        }
+
+        if ($payment_getway == 'handcash') {
+            Cart::clear();
+            return view('pages.handcash');
+        }elseif ($payment_getway == 'debitcard') {
+            echo "Payment Successfully  by Debitcard";
+        }elseif ($payment_getway == 'bkash') {
+            echo "Payment Successfully  by bKash";
+        }
     }
 
     public function customer_login(Request $request)

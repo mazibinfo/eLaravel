@@ -92,3 +92,7 @@ Route::get('/all-slider','SliderController@all_slider');
 Route::get('/inactive-slider/{id}','SliderController@inactive_slider');
 Route::get('/active-slider/{id}','SliderController@active_slider');
 Route::get('/delete-slider/{id}','SliderController@delete_slider');
+
+
+//Manage Order .....................................
+Route::get('/manage-order','ManageOrderController@manage_order');
