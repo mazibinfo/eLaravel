@@ -51,7 +51,7 @@
 							</a>
 						@endif
 							
-						<a class="btn btn-info" href="{{ URL::to('/edit-category/'.$row->id) }}">
+						<a class="btn btn-info" href="{{ URL::to('/view-order_details/'.$row->id) }}">
 							<i class="halflings-icon white edit"></i>  
 						</a>
 

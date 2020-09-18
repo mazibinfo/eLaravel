@@ -61,50 +61,55 @@ class CheckoutController extends Controller
 
     public function order_place(Request $request)
     {
+        $cartCollection = Cart::getContent();
         $payment_getway=$request->payment_getway;
         $shipping_id=Session::get('shipping_id');
         $customer_id=Session::get('customer_id');
         $order_total = Cart::getTotal();
+        $countcartcontent=$cartCollection->count();
 
-        $payment_data=[
-            'payment_method' => $payment_getway,
-            'payment_status' => 'Pending...'
-        ];
+        if ($countcartcontent != 0) {
+            $payment_data=[
+                'payment_method' => $payment_getway,
+                'payment_status' => 'Pending...'
+            ];
 
-        $payment_id=DB::table('tbl_payment')->InsertGetId($payment_data);
+            $payment_id=DB::table('tbl_payment')->InsertGetId($payment_data);
 
-        $order_data=[
-            'payment_id' => $payment_id,
-            'customer_id' => $customer_id,
-            'shipping_id' => $shipping_id,
-            'order_total' => $order_total,
-            'order_status' => 'Pending...'
-        ];
+            $order_data=[
+                'payment_id' => $payment_id,
+                'customer_id' => $customer_id,
+                'shipping_id' => $shipping_id,
+                'order_total' => $order_total,
+                'order_status' => 'Pending...'
+            ];
 
-        $order_id=DB::table('tbl_order')->InsertgetId($order_data);
+            $order_id=DB::table('tbl_order')->InsertgetId($order_data);
 
-        $cartCollection = Cart::getContent();
+            foreach ($cartCollection as $v_cartCollection) {
+                $order_details_data=[
+                    'order_id' => $order_id,
+                    'product_id' => $v_cartCollection->id,
+                    'product_name' => $v_cartCollection->name,
+                    'product_price' => $v_cartCollection->price,
+                    'product_sales_quantity' => $v_cartCollection->quantity
+                 ];
 
-        foreach ($cartCollection as $v_cartCollection) {
-            $order_details_data=[
-                'order_id' => $order_id,
-                'product_id' => $v_cartCollection->id,
-                'product_name' => $v_cartCollection->name,
-                'product_price' => $v_cartCollection->price,
-                'product_sales_quantity' => $v_cartCollection->quantity
-             ];
-
-             DB::table('tbl_order_details')->insert($order_details_data);
+                 DB::table('tbl_order_details')->insert($order_details_data);
+            }
+        
+            if ($payment_getway == 'handcash') {
+                Cart::clear();
+                return view('pages.handcash');
+            }elseif ($payment_getway == 'debitcard') {
+                echo "Payment Successfully  by Debitcard";
+            }elseif ($payment_getway == 'bkash') {
+                echo "Payment Successfully  by bKash";
+            }
+        }else{
+            return redirect()->route('payment')->with('message','Your Shopping Cart is empty..');      
         }
-
-        if ($payment_getway == 'handcash') {
-            Cart::clear();
-            return view('pages.handcash');
-        }elseif ($payment_getway == 'debitcard') {
-            echo "Payment Successfully  by Debitcard";
-        }elseif ($payment_getway == 'bkash') {
-            echo "Payment Successfully  by bKash";
-        }
+            
     }
 
     public function customer_login(Request $request)

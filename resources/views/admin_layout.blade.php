@@ -18,6 +18,7 @@
 	
 	<!-- start: CSS -->
 	<link id="bootstrap-style" href="{{asset('backend/css/bootstrap.min.css')}}" rel="stylesheet">
+	<!-- <link id="bootstrap-style" href="{{asset('backend/css/custom.css')}}" rel="stylesheet"> -->
 	<link href="{{asset('backend/css/bootstrap-responsive.min.css')}}" rel="stylesheet">
 	<link id="base-style" href="{{asset('backend/css/style.css')}}" rel="stylesheet">
 	<link id="base-style-responsive" href="{{asset('backend/css/style-responsive.css')}}" rel="stylesheet">

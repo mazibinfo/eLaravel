@@ -36,7 +36,7 @@ Route::post('/customer-login','CheckoutController@customer_login');
 Route::get('/customer-logout','CheckoutController@customer_logout');
 
 //payment........................................
-Route::get('/payment','CheckoutController@payment');
+Route::get('/payment','CheckoutController@payment')->name('payment');
 Route::post('/order-place','CheckoutController@order_place');
 
 
@@ -96,3 +96,4 @@ Route::get('/delete-slider/{id}','SliderController@delete_slider');
 
 //Manage Order .....................................
 Route::get('/manage-order','ManageOrderController@manage_order');
+Route::get('/view-order_details/{id}','ManageOrderController@view_order_details');

@@ -83,11 +83,16 @@
 		<div class="paymentCont col-sm-12">
 			<div class="headingWrap">
 					<h3 class="headingTop text-center">Select Your Payment Method</h3>
+					
 			</div>
 			<div class="paymentWrap">
 				<form action="{{ URL::to('/order-place') }}" method="post">
-				{{ csrf_field() }}							            
-		            <input type="radio" name="payment_getway" value="handcash" checked>Hand Cash<br> 
+				{{ csrf_field() }}
+
+				@if (session('message'))
+                    <li class="alert-danger">{{ session('message') }}</li>
+                @endif							            
+		            <input type="radio" name="payment_getway" value="handcash">Hand Cash<br> 
 		            <input type="radio" name="payment_getway" value="debitcard">Debit Card<br>
 		            <input type="radio" name="payment_getway" value="bkash">Bkash<br><br>
 		            <input type="submit" name="" value="Done">
